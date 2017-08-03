@@ -16,6 +16,7 @@
 	<modules>
 		<module>front</module>
 		<module>base</module>
+		<module>core</module>
 	</modules>
 	<packaging>pom</packaging>
 	<name>general</name>
@@ -99,11 +100,16 @@
 	<!-- 依赖项定义 -->
 	<dependencyManagement>
 		<dependencies>
-			<!--<dependency>
-				<groupId>com.tomowork.shop</groupId>
-				<artifactId>shop-utils</artifactId>
+			<dependency>
+				<groupId>com.wu.general</groupId>
+				<artifactId>general-base</artifactId>
 				<version>${project.version}</version>
-			</dependency>-->
+			</dependency>
+			<dependency>
+				<groupId>com.wu.general</groupId>
+				<artifactId>general-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>com.easyjf</groupId>

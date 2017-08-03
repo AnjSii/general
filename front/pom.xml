@@ -13,10 +13,10 @@
 
 	<!-- 依赖项定义 -->
 	<dependencies>
-		<!--<dependency>
-			<groupId>com.tomowork.shop</groupId>
-			<artifactId>shop-utils</artifactId>
-		</dependency>-->
+		<dependency>
+			<groupId>com.wu.general</groupId>
+			<artifactId>general-base</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>javax.inject</groupId>

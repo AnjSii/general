@@ -15,6 +15,11 @@
 	<!-- 依赖项定义 -->
 	<dependencies>
 
+		<dependency>
+			<groupId>com.wu.general</groupId>
+			<artifactId>general-core</artifactId>
+		</dependency>
+
 		<!-- SPRING begin -->
 		<dependency>
 			<groupId>org.springframework</groupId>
