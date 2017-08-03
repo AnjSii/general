@@ -15,11 +15,8 @@ import javax.persistence.TypedQuery;
 
 import com.wu.general.core.exception.CanotRemoveObjectException;
 
-import org.springframework.transaction.annotation.Transactional;
-
 //import org.hibernate.annotations.QueryHints;
 
-@Transactional //TODO 是否应该去掉？ wuxun 2017/08/03.
 public class GenericEntityDao<E> {
 
 	@PersistenceContext
