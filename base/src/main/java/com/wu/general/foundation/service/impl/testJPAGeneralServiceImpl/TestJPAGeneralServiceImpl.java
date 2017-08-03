@@ -1,10 +1,10 @@
-package com.wu.general.foundation.service.impl.testJPAServiceImpl;
+package com.wu.general.foundation.service.impl.testJPAGeneralServiceImpl;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.wu.general.foundation.domain.TestJPAGeneral;
-import com.wu.general.foundation.service.testJPAService.TestJPAGeneralService;
+import com.wu.general.foundation.service.testJPAGeneralService.TestJPAGeneralService;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

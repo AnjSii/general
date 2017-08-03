@@ -13,10 +13,6 @@
 						http://www.springframework.org/schema/tx
 						http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
-	<context:component-scan base-package="com.wu.general">
-		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-	</context:component-scan>
-
 	<!-- 配置事务管理器 -->
 	<bean id="transactionManager"
 		  class="org.springframework.orm.jpa.JpaTransactionManager">
@@ -24,10 +20,23 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
+	<!-- 启用支持Annotation注解方式的事务管理 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<context:component-scan base-package="com.wu">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	<!-- 定义了与实体相关的dao -->
+	<bean id="genericEntityDao"
+		  class="com.wu.general.core.base.GenericEntityDao" scope="prototype"
+		  lazy-init="true">
+	</bean>
+
 	<!-- 配置JPA -->
 	<bean name="entityManagerFactory"
 		  class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="persistenceUnitName" value="hicailiao-1.0" />
+		<property name="persistenceUnitName" value="general-1.0" />
 		<property name="packagesToScan">
 			<list>
 				<value>com.wu.general.foundation.domain</value>

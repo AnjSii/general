@@ -17,6 +17,10 @@
 			<groupId>com.wu.general</groupId>
 			<artifactId>general-base</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.wu.general</groupId>
+			<artifactId>general-core</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>javax.inject</groupId>

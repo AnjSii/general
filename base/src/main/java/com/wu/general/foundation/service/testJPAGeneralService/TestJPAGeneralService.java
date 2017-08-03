@@ -1,4 +1,4 @@
-package com.wu.general.foundation.service.testJPAService;
+package com.wu.general.foundation.service.testJPAGeneralService;
 
 import com.wu.general.foundation.domain.TestJPAGeneral;
 
@@ -7,7 +7,7 @@ import com.wu.general.foundation.domain.TestJPAGeneral;
  */
 public interface TestJPAGeneralService {
 
-	public TestJPAGeneral findById(Long id);
+	TestJPAGeneral findById(Long id);
 
 	boolean save(TestJPAGeneral testJPA);
 

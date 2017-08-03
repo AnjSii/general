@@ -1,8 +1,9 @@
-package com.wu.general.controller.testJPA;
+package com.wu.general.controller.testJPAGeneral;
 
 import java.util.Map;
 
-import com.wu.general.foundation.service.testJPAService.TestJPAGeneralService;
+import com.wu.general.foundation.domain.TestJPAGeneral;
+import com.wu.general.foundation.service.testJPAGeneralService.TestJPAGeneralService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,11 +18,11 @@ public class TestJPAGeneralController {
 	@Autowired
 	private TestJPAGeneralService testJPAGeneralService;
 
-	@RequestMapping({ "/testJPAfindById.htm" })
+	@RequestMapping({ "/testJPAGeneralfindById.htm" })
 	public String testService(Long id, Map<String, Object> map) {
-		com.wu.general.foundation.domain.TestJPAGeneral testJPA = testJPAGeneralService.findById(id);
+		TestJPAGeneral testJPA = testJPAGeneralService.findById(id);
 		map.put("id", testJPA.getId());
 		map.put("name", testJPA.getName());
-		return "testJPAfindById";
+		return "testJPAGeneralfindById";
 	}
 }
