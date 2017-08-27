@@ -14,10 +14,10 @@
 
 	<!-- 依赖项定义 -->
 	<dependencies>
-		<dependency>
+		<!--<dependency>
 			<groupId>com.easyjf</groupId>
 			<artifactId>easydbo</artifactId>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>cglib</groupId>
