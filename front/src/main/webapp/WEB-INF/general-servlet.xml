@@ -34,6 +34,13 @@
 	</bean>
 	<bean id="viewResolver"
 		  class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+		<property name="requestContextAttribute" value="web"/>
+		<property name="contentType" value="text/html;charset=utf-8"/>
+		<property name="exposeSpringMacroHelpers" value="true"/>
+		<property name="exposeRequestAttributes" value="true"/>
+		<property name="exposeSessionAttributes" value="true"/>
+		<property name="allowSessionOverride" value="true"/>
+		<property name="allowRequestOverride" value="true"/>
 		<property name="suffix" value=".html"/>
 	</bean>
 
