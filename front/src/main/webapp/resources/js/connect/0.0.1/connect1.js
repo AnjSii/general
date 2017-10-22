@@ -89,7 +89,7 @@ function logout() {
     $.removeCookie('password');
     $.removeCookie('server');
     $.removeCookie('tochatJID');
-    window.location.href = './';
+    window.location.href = '../../../../';
 }
 
 function remove_user(userid,name) {
@@ -214,7 +214,7 @@ $(document).ready(function() {
         (typeof(username) == 'undefined') || 
         (typeof(password) == 'undefined')) {
 
-	     window.location.href = "./";
+	     window.location.href = "../../../../";
 	     return ;
     } else {
     	if(!connected) {
