@@ -1,0 +1,25 @@
+#foreach($chatTime in $chatMap.keySet())
+	#foreach($!chat in $chatMap.get($!chatTime))
+		#if($chatMap.get($!chatTime).keySet() == "[" + $!senderUserName + "]")
+		<dl class="me m1">
+			<dt>
+				<a><img src="/resources/images/chat7.png" alt=""/></a>
+				<ul>
+					<li>$!senderUserName<span>$!CommUtil.formatLongDate($!chatTime)</span></li>
+				</ul>
+			</dt>
+			<dd>$chat</dd>
+		</dl>
+		#else
+		<dl class="vhe m1">
+			<dt>
+				<a href="#"><img src="/resources/images/chat4.png" alt=""/></a>
+				<ul>
+					<li>$receiverUserName<span>$!CommUtil.formatLongDate($!chatTime)</span></li>
+				</ul>
+			</dt>
+			<dd>$chat</dd>
+		</dl>
+		#end
+	#end
+#end
