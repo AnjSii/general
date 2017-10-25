@@ -1,5 +1,8 @@
+// 域名
+var DOMAIN = "192.168.10.178";
+
 // XMPP服务器BOSH地址
-var BOSH_SERVICE = 'http://im.hicailiao.com:5280';
+var BOSH_SERVICE = 'http://' + DOMAIN + ':5280';
 
 var HOST = window.location.host;
 
@@ -37,18 +40,53 @@ function onConnect(status) {
 		// 首先要发送一个<presence>给服务器（initial presence）
 		connection.send($pres().tree());
 		messageRecord();
+		messageUser();
 	}
+}
+
+/*获取当前用户与谁聊过天*/
+function messageUser() {
+	if (connected) {
+		//alert("this is my chatting message record");
+		var iq = $iq({
+			type: 'get',
+			id: 'query1'
+		}).c('list', {xmlns: 'urn:xmpp:archive'});
+		connection.sendIQ(iq, getMessageUser);
+	} else {
+		alert("请先登录");
+	}
+}
+
+/*获取与谁聊过天回调函数*/
+function getMessageUser(iq){
+	var xmlxx = new XMLSerializer();
+	var users  = xmlxx.serializeToString(iq);
+	console.log(iq);
+	console.log(users);
+	jQuery.get(
+			"http://" + URI + "chatting_users_ajax.htm", {
+				"users":users,
+				"currentreceiver":senderUserName.split("@")[0]
+			},function(data){
+				jQuery("#chat_left_content").append(data);
+			},"text");
 }
 
 /*获取指定用户（chatWith）的历史聊天记录*/
 function messageRecord() {
+	var date = new Date();
+	var adad = date.toUTCString();
+	/*2015-06-08T00:00:00.000Z*/
+	var dateString = date.getUTCFullYear() + "-" + date.getMonth() + "-" + date.getDate() + "T00:00:00.000Z" + "-0800";
 	if (connected) {
 		//alert("this is my chatting message record");
 		var iq = $iq({
 			type: 'get',
 			id: 'query'
-		}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: receiverUserName});
+		}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: receiverUserName, start : dateString});
 		connection.sendIQ(iq, getMessageRecord);
+		console.log(iq);
 	} else {
 		alert("请先登录");
 	}
@@ -61,12 +99,13 @@ function getMessageRecord(iq){
 	jQuery.get(
 			"http://" + URI + "chatting_content_ajax.htm", {
 				"chatRecordXml": chatRecordXml,
-				"chatCurrentName": "wuxun",
-				"chatWithName": "hicailiao"
+				"chatCurrentName": senderUserName.split("@")[0],
+				"chatWithName": receiverUserName.split("@")[0]
 			},
 			function(data) {
 				jQuery("#msg").children().remove();
 				jQuery("#msg").append(data);
+				jQuery("#msg")[0].scrollTop = jQuery("#msg")[0].scrollHeight;
 			},
 			"text");
 }
@@ -84,13 +123,17 @@ function inMessage() {
 
 		var date = new Date();
 
+		var chatDate = '<p style="text-align: center;" id="currentTime">' + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + '</p>';
+
 		//聊天框显示
 		var message = '<dl class="me m1"><dt>'
 				+ '<a href="#"><img src="/resources/images/chat7.png" alt=""/></a>'
 				+ '<ul><li>' + senderUserName.split("@")[0]+ '<span>'
 				+  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + '</span></li></ul></dt><dd>'
 				+ escape(text) +'</dd></dl>';
-
+		if ($("#currentTime")[0] === undefined) {
+			$("#msg").append(chatDate);
+		}
 		$("#msg").append(message);
 		$("#input-msg").val('');
 	} else {
@@ -106,14 +149,22 @@ function onMessage(msg) {
 	var elems = msg.getElementsByTagName('body');
 	var date = new Date();
 
-	if (type == "chat" && elems.length > 0) {
+	if (type === "chat" && elems.length > 0) {
 		var body = elems[0];
+
+		var chatDate = '<p style="text-align: center;" id="currentTime">' + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + '</p>';
+
 		var message_seller='<dl class="vhe m1"><dt>'
 				+ '<a href="#"><img src="/resources/images/chat4.png" alt=""/></a>'
 				+ '<ul><li>'+ receiverUserName.split("@")[0] + '<span>'
 				+  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + '</span></li></ul></dt><dd>'
 				+ escape(Strophe.getText(body)) +'</dd></dl>';
+
+		if ($("#currentTime")[0] === undefined) {
+			$("#msg").append(chatDate);
+		}
 		$("#msg").append(message_seller);
+		$("#msg")[0].scrollTop = $("#msg")[0].scrollHeight;
 	}
 	return true;
 }
@@ -129,8 +180,8 @@ function escape(text) {
 
 $(document).ready(function() {
 
-	senderUserName = jQuery("#senderUserName").val() + "@im.hicailiao.com";
-	receiverUserName = jQuery("#receiverUserName").val() + "@im.hicailiao.com";
+	senderUserName = jQuery("#senderUserName").val() + "@" + DOMAIN;
+	receiverUserName = jQuery("#receiverUserName").val() + "@" + DOMAIN;
 
 	// 通过BOSH连接XMPP服务器
 	if(!connected) {

@@ -2,9 +2,11 @@ package com.wu.general.controller.tigaseChat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
@@ -103,5 +105,35 @@ public class TigaseChat {
 			}
 		}
 		return "chatting_content_ajax";
+	}
+
+	@RequestMapping({ "chatting_users_ajax.htm" })
+	public String chatting_users_ajax(HttpServletRequest request, HttpServletResponse response, String users,
+									String currentreceiver, Model model) {
+		List<String> userList = new ArrayList<>();
+		if (!users.isEmpty()) {
+			try {
+				Document document = DocumentHelper.parseText(users);
+				Element iqElement = document.getRootElement();
+				Element listElement = iqElement.element("list");
+
+				Iterator iterator = listElement.elementIterator();
+				while (iterator.hasNext()) {
+					Element elem = (Element)iterator.next();
+					if (elem.getName().equals("chat")) {
+						String userName = elem.attributeValue("with").split("@")[0];
+						if (!currentreceiver.equals(userName)) {
+							if (!userList.contains(userName)) {
+								userList.add(userName);
+							}
+						}
+					}
+				}
+				model.addAttribute("userList", userList);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
+		}
+		return "chatting_user_ajax";
 	}
 }
