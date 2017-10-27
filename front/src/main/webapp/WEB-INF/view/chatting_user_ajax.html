@@ -1,13 +1,14 @@
+#set($count = 2)
 #foreach($user in $userList)
-	#set( $count = $!velocityCount + 1)
-<dl id="$!user.userName" chat_id="tabcon$!count" class="" onclick="switchTab(this)">
-	<dt><img src="/resources/images/upfile/chat_buyer.png" alt=""/></dt>
-	<dd>
-		<p>
-			<strong>$!user.store.store_name</strong><span>15:20</span>
-			<span style="display: none;" id="storeName">$!user.store.user.userName</span>
-		</p>
-	</dd>
-	<p></p>
-</dl>
+	<dl id="$!user" chat_id="tabcon$!count" class="" onclick="switchTab(this)">
+		<dt><img src="/resources/images/upfile/chat_buyer.png" alt=""/></dt>
+		<dd>
+			<p>
+				<strong>$!user</strong><span>15:20</span>
+				<span style="display: none;" id="storeName">$!user</span>
+			</p>
+		</dd>
+		<p></p>
+	</dl>
+#set($count = $count + 1)
 #end

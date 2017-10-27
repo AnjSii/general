@@ -1,5 +1,5 @@
 // 域名
-var DOMAIN = "192.168.10.178";
+var DOMAIN = "192.168.0.177";
 
 // XMPP服务器BOSH地址
 var BOSH_SERVICE = 'http://' + DOMAIN + ':5280';
@@ -23,7 +23,6 @@ var receiverUserName = "";
 
 // 连接状态改变的事件
 function onConnect(status) {
-	console.log(status);
 	if (status == Strophe.Status.CONNFAIL) {
 		alert("连接失败！");
 	} else if (status == Strophe.Status.AUTHFAIL) {
@@ -67,7 +66,7 @@ function getMessageUser(iq){
 	jQuery.get(
 			"http://" + URI + "chatting_users_ajax.htm", {
 				"users":users,
-				"currentreceiver":senderUserName.split("@")[0]
+				"currentreceiver":receiverUserName.split("@")[0]
 			},function(data){
 				jQuery("#chat_left_content").append(data);
 			},"text");
@@ -78,15 +77,19 @@ function messageRecord() {
 	var date = new Date();
 	var adad = date.toUTCString();
 	/*2015-06-08T00:00:00.000Z*/
-	var dateString = date.getUTCFullYear() + "-" + date.getMonth() + "-" + date.getDate() + "T00:00:00.000Z" + "-0800";
+	var dateString = date.getUTCFullYear() + "-" + date.getMonth() + "-" + date.getDate() + "T00:00:00.000Z";
 	if (connected) {
-		//alert("this is my chatting message record");
-		var iq = $iq({
+		/*var iq = $iq({
 			type: 'get',
 			id: 'query'
-		}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: receiverUserName, start : dateString});
+		}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: receiverUserName,
+			from: '2017-10-22T00:00:00.000Z', end: new Date().toUTCString()})
+			.c('max', 1, null);*/
+        var iq = $iq({
+            type: 'get',
+            id: 'query'
+        }).c('retrieve', {xmlns: 'urn:xmpp:archive', with: receiverUserName});
 		connection.sendIQ(iq, getMessageRecord);
-		console.log(iq);
 	} else {
 		alert("请先登录");
 	}
@@ -146,10 +149,16 @@ function onMessage(msg) {
 
 	// 解析出<message>的from、type属性，以及body子元素
 	var type = msg.getAttribute('type');
+	var from = msg.getAttribute('from');
 	var elems = msg.getElementsByTagName('body');
 	var date = new Date();
 
-	if (type === "chat" && elems.length > 0) {
+	var user = from.split("/")[0];
+	var user1 = from.split('@')[0];
+
+    jQuery('#' + user1).addClass('tabmsg');
+
+	if (type === "chat" && elems.length > 0 && user === receiverUserName) {
 		var body = elems[0];
 
 		var chatDate = '<p style="text-align: center;" id="currentTime">' + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + '</p>';
@@ -169,6 +178,16 @@ function onMessage(msg) {
 	return true;
 }
 
+function switchTab(obj) {
+	var aa = jQuery(obj);
+    jQuery(obj).siblings().removeClass("tabon");
+    $(obj).removeClass("tabmsg");
+    $(obj).addClass("tabon");
+    receiverUserName = obj.id + "@" + DOMAIN;
+    messageRecord();
+
+}
+
 function escape(text) {
 	text = text.replace(/&/g, '&amp;');
 	text = text.replace(/</g, '&lt;');
@@ -186,7 +205,13 @@ $(document).ready(function() {
 	// 通过BOSH连接XMPP服务器
 	if(!connected) {
 		connection = new Strophe.Connection(BOSH_SERVICE);
-		connection.connect(senderUserName , "", onConnect);
+        var iq = $iq({
+            type: 'set',
+            id: 'query4'
+        }).c('bind', {xmlns: 'urn:ietf:params:xml:ns:xmpp-bind'})
+            .c('resource', null, 'web');
+        connection.sendIQ(iq);
+		connection.connect(senderUserName + "/web" , "", onConnect);
 		jid = senderUserName;
 	}
 });
