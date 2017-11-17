@@ -33,10 +33,12 @@ public class TigaseChat {
 		model.addAttribute("userName", "sender");
 		model.addAttribute("passord", "123");
 
-		model.addAttribute("senderUserName", "啦啦啦");
+		model.addAttribute("sender", "啦啦啦");
+		model.addAttribute("senderUserName", "wuxun");
 		model.addAttribute("senderPassord", "123");
 
-		model.addAttribute("receiverUserName", "宏利建材旗舰店");
+		model.addAttribute("receiver", "宏利建材旗舰店");
+		model.addAttribute("receiverUserName", "hicailiao");
 		model.addAttribute("receiverPassword", "123");
 		return "senderTigaseChat";
 	}
@@ -46,7 +48,12 @@ public class TigaseChat {
 		model.addAttribute("userName", "receiver");
 		model.addAttribute("password", "123");
 
-		model.addAttribute("receiverUserName", "宏利建材旗舰店");
+		model.addAttribute("sender", "宏利建材旗舰店");
+		model.addAttribute("senderUserName", "hicailiao");
+		model.addAttribute("senderPassord", "123");
+
+		model.addAttribute("receiver", "啦啦啦");
+		model.addAttribute("receiverUserName", "wuxun");
 		model.addAttribute("receiverPassword", "123");
 		return "receiverTigaseChat";
 	}
