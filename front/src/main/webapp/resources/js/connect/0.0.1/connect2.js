@@ -37,7 +37,7 @@ function onConnect(status) {
 
 		// 首先要发送一个<presence>给服务器（initial presence）
 		connection.send($pres().tree());
-		messageRecord();
+		msgCount();
 		messageUser();
 	}
 }
@@ -58,7 +58,7 @@ function messageUser() {
 /*获取与谁聊过天回调函数*/
 function getMessageUser(iq){
 	var xmlxx = new XMLSerializer();
-	var users  = xmlxx.serializeToString(iq);
+	var users = xmlxx.serializeToString(iq);
 	jQuery.get(
 			"http://" + URI + "/chatting_users_ajax.htm", {
 				"users":users,
@@ -68,11 +68,39 @@ function getMessageUser(iq){
 			},"text");
 }
 
-/*获取指定用户（chatWith）的历史聊天记录*/
-function messageRecord() {
-	var date = new Date();
-	var from = date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1) + "-" + date.getDate() + "T00:00:00Z";
+/*获取聊天记录的条数*/
+function msgCount() {
 	if (connected) {
+		var iq = $iq({
+			type: 'get',
+			id: 'query12'
+		}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: receiverUserName})
+				.c("set", {xmlns: 'http://jabber.org/protocol/rsm'}).c("max", null, 1);
+		connection.sendIQ(iq, getMsgCount);
+	}
+}
+
+/*获取聊天记录的条数回调函数*/
+function getMsgCount(iq) {
+	var totalCount = iq.children[0].lastChild.children[2].innerHTML;
+	messageRecord(totalCount);
+}
+
+/*获取指定用户（chatWith）的历史聊天记录*/
+function messageRecord(totalCount) {
+	if (connected) {
+		var iq = $iq({
+			type: 'get',
+			id: 'query'
+		}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: receiverUserName})
+				.c("set", {xmlns: 'http://jabber.org/protocol/rsm'})
+				.c("before", null, totalCount)
+				.up().c("max", null, 100);
+		connection.sendIQ(iq, getMessageRecord);
+	} else {
+		alert("请先登录");
+	}
+	/*if (connected) {
 		var iq = $iq({
 			type: 'get',
 			id: 'query'
@@ -80,7 +108,7 @@ function messageRecord() {
 		connection.sendIQ(iq, getMessageRecord);
 	} else {
 		alert("请先登录");
-	}
+	}*/
 }
 
 /*获取历史聊天记录回调函数*/
@@ -212,10 +240,5 @@ $(document).ready(function() {
 		connection = new Strophe.Connection(BOSH_SERVICE);
 		connection.connect(senderUserName, "sid=BE5F567C85216D7841B1CDF3C378833D", onConnect);
 		jid = senderUserName;
-		/*var passord = prompt("请输入:","");
-		if (passord !== null){
-			connection.connect(senderUserName, passord, onConnect);
-			jid = senderUserName;
-		}*/
 	}
 });
