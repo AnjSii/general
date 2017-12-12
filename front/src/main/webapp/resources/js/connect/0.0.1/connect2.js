@@ -1,5 +1,5 @@
 // 域名
-var DOMAIN = "192.168.10.103";
+var DOMAIN = "localhost";
 
 // XMPP服务器BOSH地址
 var BOSH_SERVICE = 'http://' + DOMAIN + ':5280';
@@ -17,9 +17,23 @@ var connected = false;
 // 当前登录的JID
 var jid = "";
 
+//发送者
 var senderUserName = "";
 
+//接收者
 var receiverUserName = "";
+
+//总消息数
+var totalCount;
+
+//分页索引
+var index;
+
+//查看更多索引
+var checkMoreIndex;
+
+//查看更多点击次数
+var checkMoreCount = 0;
 
 // 连接状态改变的事件
 function onConnect(status) {
@@ -34,7 +48,6 @@ function onConnect(status) {
 		connected = true;
 		// 当接收到<message>节，调用onMessage回调函数
 		connection.addHandler(onMessage, null, 'message', null, null, null);
-
 		// 首先要发送一个<presence>给服务器（initial presence）
 		connection.send($pres().tree());
 		msgCount();
@@ -68,6 +81,141 @@ function getMessageUser(iq){
 			},"text");
 }
 
+/*获取聊天记录分页*/
+function historyMsg(count) {
+	if (connected) {
+		switch (count) {
+			default:
+                showOrHiden();
+				index = totalCount;
+				break;
+			case "front":
+				index = 10;
+				break;
+			case "Previous":
+				if (index - 10 >= 0) {
+					index = index - 10;
+				} else {
+					return false;
+				}
+				break;
+			case "next":
+				index = index + 10;
+				if (index > totalCount) {
+					index = totalCount;
+				}
+				break;
+			case "back":
+				index = totalCount;
+				break;
+		}
+		var iq = $iq({
+			type: 'get',
+			id: generateMixed(6)
+		}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: receiverUserName})
+				.c("set", {xmlns: 'http://jabber.org/protocol/rsm'})
+				.c("before", null, index)
+				.c("max", null, 10)
+				.up().up().c("max", null, 10);
+		connection.sendIQ(iq, getHistoryMsg);
+	} else {
+		alert("请先登录");
+	}
+}
+
+/*聊天记录分页回调函数*/
+function getHistoryMsg(iq) {
+	var startTime =  Date.parse(new Date(iq.childNodes[0].getAttribute("start")));
+	var msg = iq.childNodes[0].childNodes;
+	jQuery("#historyMessage_text").children().remove();
+	jQuery(msg).each(function() {
+		var className;
+		var userName;
+		var msgText;
+		if (this.nodeName === "from") {
+			className = "receiverHistory_name";
+			userName = receiverUserName.split("@")[0];
+		} else if (this.nodeName === "to") {
+			className = "senderHistory_name";
+			userName = senderUserName.split("@")[0];
+		}
+		if (this.nodeName !== "set") {
+			var time = startTime + parseInt(this.getAttribute("secs")) * 1000;
+			var newDate = new Date();
+			newDate.setTime(time);
+			jQuery(this.childNodes).each(function() {
+				if (this.nodeName === "body") {
+					msgText = this.innerHTML;
+				}
+			});
+			var text = '<span class="' + className + '"><span class="history_name">' + userName + '</span><span class="history_time">' + newDate.toLocaleString()
+					+ '</span></span><div class="history_msg">' + msgText + '</div>';
+			jQuery("#historyMessage_text").append(text);
+		}
+		jQuery("#historyMessage_text")[0].scrollTop = jQuery("#historyMessage_text")[0].scrollHeight;
+	});
+}
+
+function showOrHiden() {
+    if($('#historyMessage').is(':hidden')){
+        jQuery(".chat_body").css({"width":"1232px"});
+        jQuery(".chat_top").css({"width":"983px"});
+        $('#historyMessage').show();
+    }else{
+        jQuery(".chat_body").css({"width":"1094px"});
+        jQuery(".chat_top").css({"width":"844px"});
+        $('#historyMessage').hide();
+    }
+}
+
+/*点击查看更多*/
+function checkMore() {
+    if (connected) {
+		checkMoreCount++;
+		if (checkMoreIndex - 10 >= 0 && checkMoreCount <= 5) {
+			checkMoreIndex = checkMoreIndex - 10;
+		} else {
+			return false;
+		}
+		var iq = $iq({
+			type: 'get',
+			id: generateMixed(6)
+		}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: receiverUserName})
+			.c("set", {xmlns: 'http://jabber.org/protocol/rsm'})
+			.c("before", null, checkMoreIndex)
+			.c("max", null, 10)
+			.up().up().c("max", null, 10);
+		connection.sendIQ(iq, getCheckMore);
+	} else {
+		alert("请先登录");
+	}
+}
+
+/*点击查看更多回调函数*/
+function getCheckMore(iq) {
+	var xmlxx = new XMLSerializer();
+	var chatRecordXml  = xmlxx.serializeToString(iq);
+	jQuery.ajax({type:'POST',
+		url: "http://" + URI + "/chatting_content_ajax.htm",
+		data: {"chatRecordXml": chatRecordXml,
+			"chatCurrentName": senderUserName.split("@")[0],
+			"chatWithName": receiverUserName.split("@")[0]
+		},
+		success:function(html) {
+			var height = jQuery("#msg")[0].scrollHeight;
+			jQuery("#msg").prepend(html);
+			if (checkMoreCount === 5 && totalCount > 50) {
+				jQuery("#checkMore").html("点击打开聊天记录，查看更多消息");
+				jQuery("#checkMore").attr("onclick", "historyMsg()");
+			} else if (checkMoreCount !== 5 && checkMoreIndex <= 10 && totalCount <= 50) {
+				jQuery("#checkMore").html("");
+			}
+			jQuery("#checkMore").insertBefore(jQuery(jQuery(".m1")[0]));
+			jQuery("#msg")[0].scrollTop = jQuery("#msg")[0].scrollHeight - height - 200;
+		}
+	});
+}
+
 /*获取聊天记录的条数*/
 function msgCount() {
 	if (connected) {
@@ -82,12 +230,13 @@ function msgCount() {
 
 /*获取聊天记录的条数回调函数*/
 function getMsgCount(iq) {
-	var totalCount = iq.children[0].lastChild.children[2].innerHTML;
+	totalCount = iq.children[0].lastChild.children[2].innerHTML;
+    checkMoreIndex = totalCount;
 	messageRecord(totalCount);
 }
 
 /*获取指定用户（chatWith）的历史聊天记录*/
-function messageRecord(totalCount) {
+function messageRecord() {
 	if (connected) {
 		var iq = $iq({
 			type: 'get',
@@ -95,20 +244,11 @@ function messageRecord(totalCount) {
 		}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: receiverUserName})
 				.c("set", {xmlns: 'http://jabber.org/protocol/rsm'})
 				.c("before", null, totalCount)
-				.up().c("max", null, 100);
+				.c("max", null, 10);
 		connection.sendIQ(iq, getMessageRecord);
 	} else {
 		alert("请先登录");
 	}
-	/*if (connected) {
-		var iq = $iq({
-			type: 'get',
-			id: 'query'
-		}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: receiverUserName});
-		connection.sendIQ(iq, getMessageRecord);
-	} else {
-		alert("请先登录");
-	}*/
 }
 
 /*获取历史聊天记录回调函数*/
@@ -125,6 +265,11 @@ function getMessageRecord(iq) {
 			jQuery("#msg").children().remove();
 			jQuery("#msg").append(html);
 			jQuery("#msg")[0].scrollTop = jQuery("#msg")[0].scrollHeight;
+			//显示查看更多
+			if (totalCount > 10) {
+				var checkMore = '<div style="color: blue;cursor: pointer;text-align: center;margin-bottom: 8px;" id="checkMore" onclick="checkMore()">点击查看更多</div>';
+				jQuery("#msg").prepend(checkMore);
+			}
 		}
 	});
 }
@@ -215,11 +360,15 @@ function onMessage(msg) {
 }
 
 function switchTab(obj) {
+	jQuery(".chat_body").css({"width":"1094px"});
+	jQuery(".chat_top").css({"width":"844px"});
+	$('#historyMessage').hide();
 	jQuery(obj).siblings().removeClass("tabon");
 	$(obj).removeClass("tabmsg");
 	$(obj).addClass("tabon");
 	receiverUserName = obj.id + "@" + DOMAIN;
-	messageRecord();
+	checkMoreCount = 0;
+	msgCount();
 }
 
 function escape(text) {
@@ -241,4 +390,8 @@ $(document).ready(function() {
 		connection.connect(senderUserName, "sid=BE5F567C85216D7841B1CDF3C378833D", onConnect);
 		jid = senderUserName;
 	}
+
+	jQuery("#page_Set button").click(function(){
+		historyMsg(jQuery(this).attr("quantity"));
+	});
 });

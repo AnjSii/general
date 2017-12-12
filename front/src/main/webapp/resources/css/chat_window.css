@@ -20,7 +20,7 @@
 .chat_left_top>p{background: #ebf3ff;border-radius: 2px;padding: 2px 0 2px 10px;margin-top: 12px;}
 .chat_left_top>p>img{width: 18px;height: 17px;}
 .chat_left_top>p>input{width: 154px;border: 0;background: #ebf3ff;font-size: 13px;color: #4e4d4d;font-family: "宋体", Verdana, Lucida, Helvetica, Arial, 'Simsun', sans-serif}
-.chat_left_content{background: #f4f4f4}
+.chat_left_content{background: #f4f4f4;overflow-y: auto;height: 493px;}
 .chat_left_content>dl{overflow: hidden;padding: 15px 7px 15px 10px;cursor: pointer;position: relative}
 .chat_left_content>dl dt{float: left}
 .chat_left_content>dl img{width: 39px;height: 39px;vertical-align: middle}
@@ -73,7 +73,7 @@ a:hover,a:active {text-decoration: underline;}
 .m2 li span{float:left;padding-left:10px;margin-right:-100px;}
 .vhe dd a{display: block;color: #0235b5;text-decoration: underline}
 /*聊天窗口右边*/
-.edit{ background:#fff; margin-top:1px; margin-bottom:1px; line-height:42px; padding-left:20px; height:30px}
+.edit{ background:#fff; margin-top:1px; margin-bottom:1px; line-height:42px; padding-left:20px; height:30px;position: relative;}
 .edit>img{margin-right: 15px}
 .chat_text textarea{width: 668px;height:50px;border:none; resize:none; outline:none; color:#666; line-height:18px; overflow:auto;font-size:12px;margin-bottom: 1px;padding: 0 16px;}
 .close {border-radius: 4px;width: 70px;height: 27px;margin-left:520px;font-size:14px;background: #fff;border: 1px solid #dcdcdc;color: #423b3b;}
@@ -110,3 +110,12 @@ ul{margin:0 auto;padding:0;list-style:none;}
 .nav_content{font-size:14px;text-align:left;padding-left:45px;line-height:24px;}
 .order_detail{ width:87px}
 .goods_detail{ margin-left:12px; margin-top:30px !important; margin-bottom:10px; border:none !important; }
+.historyMessage{position: absolute;bottom: -86px;width: 320px;height: 529px;border: 1px solid #ccc;border-top: none;right: -322px;background-color: white;}
+.historyMessage_text{height: 444px; overflow: auto;}
+.page_set{position: absolute;top: 487px;text-align: right;border-top: 1px solid #ccc; width: 100%}
+.page_set button{font-size: 20px;margin-right: 5px;width: 30px;border:none; background-color:transparent;background-repeat:no-repeat;cursor: pointer;}
+.receiverHistory_name{margin-left: 12px;color: green;}
+.senderHistory_name{margin-left: 12px;color: blue;}
+.history_name{display: inline-block;max-width: 100px;overflow: hidden;height: 27px;white-space: nowrap;text-overflow: ellipsis;}
+.history_time{margin-left: 5px;}
+.history_msg{margin-left: 20px;line-height: 10px;}

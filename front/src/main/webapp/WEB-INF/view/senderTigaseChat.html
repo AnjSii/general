@@ -67,6 +67,17 @@
                         <img src="$!web.contextPath/resources/images/chat12.png" width="19" height="19" alt=""/>
                         <img src="$!web.contextPath/resources/images/chat13.png" width="23" height="20" alt=""/>
                         <img src="$!web.contextPath/resources/images/chat14.png" width="23" height="20" alt=""/>
+                        <a style="float: right;margin-right: 14px;line-height: 20px;" href="javascript:void(0);" onclick="historyMsg()">聊天记录</a>
+						<div class="historyMessage" id="historyMessage" style="display: none">
+							<div style="border-bottom: 1px solid #ccc;padding-left: 12px;font-size: 18px;font-weight: 400;">消息记录</div>
+							<div class="historyMessage_text" id="historyMessage_text"></div>
+							<div class="page_set" id="page_Set">
+								<button type="button" quantity="front">|<</button>
+								<button type="button" quantity="Previous"><</button>
+								<button type="button" quantity="next">></button>
+								<button type="button" quantity="back">>|</button>
+							</div>
+						</div>
                     </div>
                     <div class="chat_text">
                         <textarea maxlength="300" id="area1"></textarea>
