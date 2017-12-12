@@ -65,6 +65,6 @@
 	</servlet-mapping>
 
 	<welcome-file-list>
-		<welcome-file>senderTigaseChat.htm</welcome-file>
+		<welcome-file>welcome.htm</welcome-file>
 	</welcome-file-list>
 </web-app>
