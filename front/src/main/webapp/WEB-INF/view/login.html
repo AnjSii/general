@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<title>采料网-上采料,材购好</title>
+<meta name="keywords" content="cailiao,采料网,hicailiao">
+<meta name="description" content="hicailiao,上采料，材购好">
+<meta name="generator" content="">
+<meta name="author" content="采料网">
+<meta name="copyright" content="采料网">
+<link rel="icon" href="$!web.contextPath/resources/images/reLogin/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="$!web.contextPath/resources/css/regandlog.css">
+<link rel="stylesheet" href="$!web.contextPath/resources/css/public.css">
+<script src="$!web.contextPath/resources/js/jquery/1.6.2/jquery-1.6.2.js"></script>
+<script src="$!web.contextPath/resources/js/reLogin/0.0.1/reLogin.js"></script>
+<script>
+	$(document).ready(function() {
+		//因为页面显示的时候直接先显示二维码，那么当ready的时候直接调用生成二维码的方法
+		getRQCode("$!web.contextPath/getRQCode.htm", "$!web.contextPath/LongConnectionCheck.htm");
+	});
+</script>
+</head>
+<body style="overflow:auto">
+<div class="reg-logo">
+	<a href="r-logo">
+	<img src="$!web.contextPath/resources/images/reLogin/LOGO.png"></a>
+</div>
+<div class="reg-big-bg">
+	<div class="main">
+		<div class="log-main">
+			<div class="tt-tab">
+				<span id="a1" class="tabon" onClick="tab('a','tabcon','1','1','2','tabon','taboff');">扫码登录</span>
+				<span id="a2" class="taboff" style="padding: 0 16px 0 55px;border-right: none" onClick="tab('a','tabcon','2','1','2','tabon','taboff');">账户登录</span>
+			</div>
+			<hr width="400px" align="left" style="border: 0;height: 1px;background: #e1e1e1"/>
+			<p class="db ov cl"></p>
+			<!-- 二维码登录 -->
+			<div id="tabcon1" class="login_code">
+				<dl class="pc_erwei">
+					<dt>
+						<img id="rqImg" alt=""/>
+					</dt>
+					<dd>
+						<ul>
+							<li>
+								<img src="$!web.contextPath/resources/images/reLogin/scan_qrcode.png" alt=""/>
+							</li>
+							<li class="pc_erwei_li2">
+								<span>打开<b>手机采料</b></span>
+								<span class="pc_erwei_span">扫一扫登录</span>
+							</li>
+						</ul>
+					</dd>
+				</dl>
+				<p>
+					下载
+					<span>采料APP</span>
+					<a href="#">免费注册</a>
+				</p>
+			</div>
+			<!-- 二维码登录 -->
+			<div id="tabcon2" class="sign_in" style="display: none">
+				<dl class="log-l log-err "><!--log-err  如果需要标红错误框可以新增这个样式，如不需要可以删除-->
+					<dt>
+						<b>
+						</b>
+					</dt>
+					<dd>
+						<input type="text" placeholder="用户名" onclick="value='';focus()" style="width:270px;">
+						<span class="login_error_sp" style="display:none"></span>
+						<span class="login_error_sp" ><label for="username" generated="true" >用户名不能为空</label></span>
+					</dd>
+				</dl>
+				<dl class="log-l">
+					<dt>
+						<i>
+						</i>
+					</dt>
+					<dd>
+						<input type="text" placeholder="密码" onclick="value='';focus()" style="width:270px;">
+						<span class="login_error_sp" style="display:none"></span>
+						<span class="login_error_sp" ><label for="username" generated="true" >密码不能为空</label></span>
+					</dd>
+				</dl>
+				<div class="log-rem">
+					<input type="checkbox">
+					<span>记住密码</span>
+					<a href="#">忘记密码</a>
+				</div>
+				<div style=" position:relative;">
+					<dl class="log-s">
+						<dt>
+							<i>
+							</i>
+						</dt>
+						<dd>
+							<input type="text" placeholder="验证码" onclick="value='';focus()" style="width:110px;">
+							<span class="login_error_sp" style="display:none"></span>
+							<span class="login_error_sp" >
+								<label for="username" generated="true" >验证码不能为空</label>
+							</span>
+						</dd>
+					</dl>
+					<ul class="log-yzm">
+						<li>
+							<div>
+							<img src="$!web.contextPath/resources/images/reLogin/yzm.jpg"></div>
+						</li>
+						<li>
+							<div style="margin-top:8px; margin-left:5px;">点击图片更新
+							<br>验证码
+							</div>
+						</li>
+					</ul>
+				</div>
+				<input type="button" value="登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录">
+				<p class="pc_erwei_p"><a href="#">立即注册</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+function tab(name, name2, cursel, n, n2, s, s2) {
+	for (i = n; i <= n2; i++) {
+		if (i == cursel) {
+			document.getElementById(name2 + i).style.display = "block";
+			document.getElementById(name + i).className = s;
+		} else {
+			document.getElementById(name2 + i).style.display = "none";
+			document.getElementById(name + i).className = s2;
+		}
+	}
+}
+</script>
+<dl class="footer footer2">
+	<dt>
+		<a href="#">首页</a>|
+		<a href="#">招聘英才</a>|
+		<a href="#">广告合作</a>|
+		<a href="#">联系我们</a>|
+		<a href="#">关于采料网</a>
+	</dt>
+	<dd>
+		<p>&copy;2015-2016&nbsp;采料网&nbsp;增值电信业务经营许可证：琼B2-20150028</p>
+	</dd>
+</dl>
+</body>
+</html>

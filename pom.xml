@@ -96,6 +96,9 @@
 		<!-- jersey restfull webservice added by gaogh-->
 		<jersey.version>2.22.4</jersey.version>
 		<javax.ws.rs.version>2.0.1</javax.ws.rs.version>
+
+		<!-- QRCode -->
+		<QRCode.version>3.3.0</QRCode.version>
 	</properties>
 
 	<!-- 依赖项定义 -->
@@ -783,8 +786,19 @@
 				<artifactId>jmh-generator-annprocess</artifactId>
 				<version>${jmh.version}</version>
 			</dependency>
-
 			<!-- BENCHMARK end -->
+
+			<!-- QRCode -->
+			<dependency>
+				<groupId>com.google.zxing</groupId>
+				<artifactId>core</artifactId>
+				<version>${QRCode.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.zxing</groupId>
+				<artifactId>javase</artifactId>
+				<version>${QRCode.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

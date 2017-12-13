@@ -2,16 +2,18 @@
 <head>
 	<title>welcome</title>
 	<style>
-		a{
-			font-size: 18px;
-			font-weight: 600;
-		}
+		a{ position: relative; text-decoration: none; border-bottom: 1px dotted #ccc; padding-bottom: 5px; }
+		a em{ display: none; position: absolute; padding: 5px; border: 1px solid #ccc; left: 20px; top: 30px; width: 60px; }
+		a:hover{border-bottom: 1px solid #ccc;}
+		a:hover em{ display: block; }
 	</style>
 </head>
 <body>
 <a href="$!web.contextPath/senderTigaseChat.htm">聊天1</a>
 <br>
 <a href="$!web.contextPath/receiverTigaseChat.htm">聊天2</a>
+<br>
+<a href="$!web.contextPath/login.htm">二维码登录页面</a>
 <br>
 <a href="$!web.contextPath/testSpring.htm">testSpring</a>
 <br>
