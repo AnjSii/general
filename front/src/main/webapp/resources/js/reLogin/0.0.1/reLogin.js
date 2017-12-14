@@ -15,6 +15,7 @@ function getRQCode(getRQCodeUrl, LongConnectionCheckUrl) {
 			jQuery("#rqImg").attr("src", "data:image/jpeg;base64," + obj.imgBase64);
 			//开始轮询
 			timerPolling(getRQCodeUrl, LongConnectionCheckUrl, obj.sid);
+			qerCodeInvalid();
 		}
 	});
 }
@@ -48,4 +49,18 @@ function LongConnectionCheck(getRQCodeUrl, LongConnectionCheckUrl, sid) {
 			}
 		}
 	})
+}
+
+function qerCodeInvalid() {
+	setTimeout(function () {
+		jQuery("#rqImg").css("opacity", "0.1");
+		jQuery("#qerCodeInvalid").show();
+		clearInterval(polling);
+	}, 180000)
+}
+
+function refreshQRcode() {
+	jQuery("#rqImg").css("opacity", "1");
+	jQuery("#qerCodeInvalid").hide();
+	getRQCode();
 }

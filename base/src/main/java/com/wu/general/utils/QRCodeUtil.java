@@ -11,7 +11,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -38,7 +40,7 @@ public class QRCodeUtil {
 	public static final String FORMAT_NAME = "JPG";
 
 	// 二维码尺寸
-	private static final int QRCODE_SIZE = 183;
+	private static final int QRCODE_SIZE = 185;
 
 	// LOGO宽度
 	private static final int WIDTH = 60;
@@ -55,7 +57,7 @@ public class QRCodeUtil {
 	 * @throws Exception 写入二维码是出现的错误
 	 */
 	public static BufferedImage createImage(String content, String imgPath, boolean needCompress) throws Exception {
-		Hashtable hints = new Hashtable();
+		Map<EncodeHintType, Object> hints = new HashMap<>();
 		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
 		hints.put(EncodeHintType.CHARACTER_SET, CHARSET);
 		hints.put(EncodeHintType.MARGIN, 1);
