@@ -113,6 +113,68 @@
 			<!-- 配置监控统计拦截的filters -->
 			<property name="filters" value="stat" />
 		</bean>
+
+		<!-- Timer_MethodInvokingJobDetailFactoryBean定时器 -->
+		<bean id="methodInvokingJobDetailFactoryBean"
+			  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+			<property name="targetObject" ref="timer_MethodInvokingJobDetailFactoryBean" />
+			<property name="targetMethod" value="execute" />
+			<property name="concurrent" value="false" />
+		</bean>
+		<bean id="timer_MethodInvokingJobDetailFactoryBean_cronTrigger"
+			  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+			<property name="jobDetail" ref="methodInvokingJobDetailFactoryBean" />
+			<property name="cronExpression" value="0/3 * * * * ?" />
+		</bean>
+
+		<!-- MethodInvokingJobDetailFactoryBean定时器调度工厂 -->
+		<bean id="methodInvokingJobDetailFactoryBean_schdulerFactory" lazy-init="false"
+			  class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+			<property name="triggers">
+				<list>
+					<ref bean="timer_MethodInvokingJobDetailFactoryBean_cronTrigger"/>
+				</list>
+			</property>
+		</bean>
+
+		<!-- Timer_JobDetailFactoryBean定时器 -->
+		<bean id="timerJobDetailFactoryBeanTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+			<!-- 任务完成之后是否依然保留到数据库，默认false -->
+			<property name="durability" value="true" />
+			<property name="requestsRecovery" value="true" />
+			<!-- 任务的实现类，必须 -->
+			<property name="jobClass" value="com.wu.general.timer.quartz.execute.QuartzExecute"/>
+			<!-- 用来给作业提供数据支持的数据结构 -->
+			<property name="jobDataAsMap">
+				<map>
+					<entry key="targetObject" value="Timer_JobDetailFactoryBean" /><!-- 调用的类 -->
+					<entry key="targetMethod" value="execute" /><!-- 调用类中的方法 -->
+				</map>
+			</property>
+			<property name="description" value="JobDetailFactoryBean_Test" />
+		</bean>
+		<bean id="timer_JobDetailFactoryBean_cronTrigger"
+			  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+			<property name="jobDetail" ref="timerJobDetailFactoryBeanTask" />
+			<property name="cronExpression" value="0/5 * * * * ?" />
+		</bean>
+
+		<bean id="jobDetailFactoryBean_schdulerFactory" lazy-init="false" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+			<!-- 配置dataSource -->
+			<property name="dataSource" ref="dataSource"/>
+			<!--启动时更新己存在的Job-->
+			<property name="overwriteExistingJobs" value="true" />
+			<!--设置自动启动-->
+			<property name="autoStartup" value="true" />
+			<property name="configLocation" value="classpath:quartz.properties" />
+			<property name="applicationContextSchedulerContextKey" value="applicationContext" />
+
+			<property name="triggers">
+				<list>
+					<ref bean="timer_JobDetailFactoryBean_cronTrigger"/>
+				</list>
+			</property>
+		</bean>
 	</beans>
 
 </beans>
