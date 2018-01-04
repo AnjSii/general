@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+						http://www.springframework.org/schema/util
+						http://www.springframework.org/schema/util/spring-util-4.3.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="shiroSecurityManager"/>
+		<property name="loginUrl" value="/login.htm"/>
+        <property name="successUrl" value="/login_success.htm"/>
+        <property name="unauthorizedUrl" value="/seller/index.htm"/>
+		<property name="filters">
+            <util:map>
+                <entry key="authc" value-ref="authcFilter"/>
+                <entry key="user" value-ref="userFilter"/>
+                <entry key="roles" value-ref="rolesFilter"/>
+            </util:map>
+        </property>
+		<property name="filterChainDefinitions">
+			<value>
+				# 用户退出登录时默重定向到 /
+				/login.htm = authc
+				/logout.htm = logout
+				/user_receive_coupon.htm = user, roles[BUYER]
+				/buyer/** = user, roles[BUYER]
+				/seller/index.htm = user, roles[BUYER]
+				/seller/sub_account_list.htm = user, roles[SELLER]
+				/seller/store_set.htm = user, roles[SELLER]
+				/seller/paymentMenu.htm = user, roles[SELLER]
+				/seller/application_view.htm = user, roles[BUYER]
+				/seller/amend_application.htm = user, roles[BUYER]
+				/seller/store_create_first.htm = user, roles[BUYER]
+				/seller/store_create_second.htm = user, roles[BUYER]
+				/seller/store_create_finish.htm = user, roles[BUYER]
+				/seller/** = authc, roles[SELLER| SUB]
+				/order/goods_cart1.htm = anon
+				/order/** = user, roles[BUYER]
+				/** = anon
+			</value>
+		</property>
+	</bean>
+
+	<bean id="authcFilter" class="com.wu.general.shiro.GeneralFrontFormAuthenticationFilter" />
+	<bean id="userFilter" class="com.wu.general.shiro.GeneralUserFilter" />
+	<bean id="rolesFilter" class="com.wu.general.shiro.GeneralRolesAuthorizationFilter" />
+
+	<bean id="shiroSecurityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="authenticator">
+			<bean class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+				<property name="authenticationListeners">
+					<list>
+						<bean class="com.wu.general.shiro.GeneralAuthenticationListener" />
+						<!--<bean class="com.wu.general.shiro.GeneralQrCodeAuthenticationListener" />-->
+					</list>
+				</property>
+				<!-- 配置仅需第一个成功的realm认证完成的认证策略，并且返回所有异常信息 -->
+				<property name="authenticationStrategy">
+					<bean class="com.wu.general.shiro.authc.pam.FirstSupportedRealmStrategy"></bean>
+				</property>
+			</bean>
+		</property>
+		<property name="rememberMeManager">
+			<bean class="com.wu.general.shiro.GeneralRememberMeManager">
+				<property name="base64CipherKey" value="${login.cookie.rememberMe.cipherKey}" />
+				<property name="cookie">
+					<bean class="org.apache.shiro.web.servlet.SimpleCookie">
+						<!-- rememberMe cookie name -->
+						<property name="name" value="${login.cookie.rememberMe.name}" />
+						<!-- 60 * 60 * 24 * 60 -->
+						<property name="maxAge" value="${login.cookie.rememberMe.maxAge}" />
+						<!-- secure, see nginx -->
+					</bean>
+				</property>
+			</bean>
+		</property>
+		<!-- setRealm after setAuthenticator -->
+		<property name="realms">
+			<list>
+				<ref bean="shopRealm" />
+				<!--<ref bean="QrCodeRealm"/>-->
+			</list>
+		</property>
+	</bean>
+
+	<bean id="shopRealm" class="com.wu.general.shiro.GeneralFrontAuthorizingRealm">
+		<property name="name" value="shopRealm" />
+		<property name="credentialsMatcher">
+			<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+				<property name="hashAlgorithmName" value="MD5" />
+			</bean>
+		</property>
+	</bean>
+	<!--<bean id="QrCodeRealm" class="com.wu.general.shiro.GeneralFrontQrCodeAuthorizingRealm">
+		<property name="name" value="QrCodeRealm" />
+	</bean>-->
+
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+	<!--<beans profile="testing">
+		<context:property-placeholder location="classpath:config-test.properties" ignore-unresolvable="true" />
+	</beans>-->
+
+	<beans profile="dev">
+		<context:property-placeholder location="classpath:config.properties" ignore-unresolvable="true" />
+	</beans>
+</beans>
