@@ -29,9 +29,9 @@ public class RqLoginController {
 	private QrLoginService qrLoginService;
 
 	//进入到登录页面
-	@RequestMapping({ "/login.htm" })
+	@RequestMapping({ "/qeLogin.htm" })
 	public String welcome(HttpServletRequest request, HttpServletResponse response) {
-		return "login";
+		return "qeLogin";
 	}
 
 	//ajax调用获取二维码

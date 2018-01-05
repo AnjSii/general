@@ -78,6 +78,7 @@ public class GeneralFrontQrCodeAuthorizingRealm extends AuthorizingRealm {
 			throw new LockedAccountException(user.getUsername() + " is locked");
 
 		return new SimpleAuthenticationInfo(user.getId(), qrCode.getSid().toCharArray(), getName());*/
+		return null;
 	}
 
 	/* 授权 */

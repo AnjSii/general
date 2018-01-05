@@ -27,7 +27,7 @@
 				# 用户退出登录时默重定向到 /
 				/login.htm = authc
 				/logout.htm = logout
-				/user_receive_coupon.htm = user, roles[BUYER]
+				<!--/user_receive_coupon.htm = user, roles[BUYER]
 				/buyer/** = user, roles[BUYER]
 				/seller/index.htm = user, roles[BUYER]
 				/seller/sub_account_list.htm = user, roles[SELLER]
@@ -40,7 +40,7 @@
 				/seller/store_create_finish.htm = user, roles[BUYER]
 				/seller/** = authc, roles[SELLER| SUB]
 				/order/goods_cart1.htm = anon
-				/order/** = user, roles[BUYER]
+				/order/** = user, roles[BUYER]-->
 				/** = anon
 			</value>
 		</property>

@@ -16,7 +16,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cacheable
 @Cache (usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
-@Table(name = "shop_rolegroup")
+@Table(name = "rolegroup")
 public class RoleGroup extends IdEntity {
 	private String name;
 

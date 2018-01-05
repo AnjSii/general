@@ -27,7 +27,7 @@ import com.wu.general.core.domain.IdEntity;
 @Cacheable
 @Cache (usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
-@Table(name = "shop_user")
+@Table(name = "user")
 public class User extends IdEntity {
 	private static final long serialVersionUID = 8026813053768023527L;
 
@@ -38,33 +38,14 @@ public class User extends IdEntity {
 	@Lock
 	private String password; //密码
 
-	private String userRole; //会员角色
-
-	private Date birthday; //生日
-
-	private String telephone; //手机
-
-	@Column(columnDefinition = "int default 0")
-	private int years; //
-
-	private String MSN; //MSN
-
-	private String address; //详细地址
-
-	private int sex; //性别
-
-	private String email; //邮箱
-
-	private int emailValid; //邮箱是否有效，0无，1有
-
-	private String mobile;
+	private String userRole; //角色
 
 	private int status;
 
 	private boolean enabled = true;
 
 	@ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
-	@JoinTable(name = "shop_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
+	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	private Set<Role> roles = new TreeSet<>();
 
 	@Transient
@@ -79,8 +60,6 @@ public class User extends IdEntity {
 	private String loginIp; //登录IP
 
 	private int loginCount; //登录次数
-
-	private int report; // -1 恶意举报 被禁止    0允许举报
 
 	public static long getSerialVersionUID() {
 		return serialVersionUID;
@@ -116,78 +95,6 @@ public class User extends IdEntity {
 
 	public void setUserRole(String userRole) {
 		this.userRole = userRole;
-	}
-
-	public Date getBirthday() {
-		return birthday;
-	}
-
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
-
-	public String getTelephone() {
-		return telephone;
-	}
-
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
-
-	public int getYears() {
-		return years;
-	}
-
-	public void setYears(int years) {
-		this.years = years;
-	}
-
-	public String getMSN() {
-		return MSN;
-	}
-
-	public void setMSN(String MSN) {
-		this.MSN = MSN;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public int getSex() {
-		return sex;
-	}
-
-	public void setSex(int sex) {
-		this.sex = sex;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public int getEmailValid() {
-		return emailValid;
-	}
-
-	public void setEmailValid(int emailValid) {
-		this.emailValid = emailValid;
-	}
-
-	public String getMobile() {
-		return mobile;
-	}
-
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
 	}
 
 	public int getStatus() {
@@ -275,14 +182,6 @@ public class User extends IdEntity {
 
 	public void setLoginCount(int loginCount) {
 		this.loginCount = loginCount;
-	}
-
-	public int getReport() {
-		return report;
-	}
-
-	public void setReport(int report) {
-		this.report = report;
 	}
 
 	// TODO 检查帐号过期状态

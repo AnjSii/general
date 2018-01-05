@@ -20,7 +20,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cacheable
 @Cache (usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
-@Table(name = "shop_role")
+@Table(name = "role")
 public class Role extends IdEntity implements Comparable {
 	private String roleName;
 
@@ -42,7 +42,7 @@ public class Role extends IdEntity implements Comparable {
 	private RoleGroup rg;
 
 	@ManyToMany(targetEntity = Res.class)
-	@JoinTable(name = "shop_role_res", joinColumns = { @javax.persistence.JoinColumn(name = "role_id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "res_id") })
+	@JoinTable(name = "role_res", joinColumns = { @javax.persistence.JoinColumn(name = "role_id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "res_id") })
 	@Cache (usage = CacheConcurrencyStrategy.READ_WRITE)
 	private List<Res> reses = new ArrayList<>();
 

@@ -18,7 +18,7 @@ import com.wu.general.core.domain.IdEntity;
 @Cacheable
 @Cache (usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
-@Table(name = "shop_res")
+@Table(name = "res")
 public class Res extends IdEntity {
 	private String resName;
 
