@@ -17,7 +17,6 @@
 		<module>front</module>
 		<module>base</module>
 		<module>core</module>
-		<module>shiro</module>
 	</modules>
 	<packaging>pom</packaging>
 	<name>general</name>
