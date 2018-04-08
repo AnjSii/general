@@ -10,6 +10,20 @@
 	<artifactId>general-arcgis</artifactId>
 	<packaging>war</packaging>
 
+	<repositories>
+		<repository>
+			<id>arcgis</id>
+			<url>https://esri.bintray.com/arcgis</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>arcgis-plugin</id>
+			<url>https://esri.bintray.com/arcgis</url>
+		</pluginRepository>
+	</pluginRepositories>
+
 	<dependencies>
 
 		<dependency>
@@ -333,6 +347,12 @@
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.esri.arcgisruntime</groupId>
+			<artifactId>arcgis-java</artifactId>
+			<version>100.2.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -387,6 +407,25 @@
 							<outputDirectory>${project.build.directory}-product</outputDirectory>
 							-->
 							<packagingExcludes>WEB-INF/lib/**</packagingExcludes>
+						</configuration>
+					</plugin>
+
+					<!--ArcGIS Java Maven Plugin-->
+					<plugin>
+						<groupId>com.esri.arcgisruntime</groupId>
+						<artifactId>arcgis-java-maven-plugin</artifactId>
+						<version>1.0</version>
+						<configuration>
+							<version>100.2.1</version>
+						</configuration>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<source>1.8</source>
+							<target>1.8</target>
 						</configuration>
 					</plugin>
 				</plugins>
