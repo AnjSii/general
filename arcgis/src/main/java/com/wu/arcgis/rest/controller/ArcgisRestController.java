@@ -1,5 +1,7 @@
 package com.wu.arcgis.rest.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,18 +9,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wu.arcgis.rest.entity.StudentVO;
-import com.wu.arcgis.rest.service.StudentService;
+import com.wu.arcgis.rest.entity.ArcgisVO;
+import com.wu.arcgis.rest.service.ArcgisRestService;
 
 @RestController
-public class StudentController {
+public class ArcgisRestController {
 
 	@Autowired
-	private StudentService studentService;
+	private ArcgisRestService arcgisRestService;
 
-	@RequestMapping(value = "/student", method = RequestMethod.GET)
+	@RequestMapping(value = "/arcgis.arc", method = RequestMethod.GET)
 	public ResponseEntity<Object> getStudent() {
-			StudentVO student = this.studentService.getStudent();
-			return new ResponseEntity<Object>(student, HttpStatus.OK);
+		ArcgisVO arcgisVO = this.arcgisRestService.getArcgis();
+		return new ResponseEntity<Object>(arcgisVO, HttpStatus.OK);
 	}
 }
