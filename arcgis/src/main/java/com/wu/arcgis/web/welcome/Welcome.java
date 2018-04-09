@@ -1,4 +1,4 @@
-package com.wu.arcgis.welcome;
+package com.wu.arcgis.web.welcome;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class Welcome {
 	@RequestMapping({ "/welcome.htm" })
 	public String welcome(Model model) {
+		model.addAttribute("lala", "13");
 		return "welcome";
 	}
 }
