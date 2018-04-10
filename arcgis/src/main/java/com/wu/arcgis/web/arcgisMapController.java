@@ -21,6 +21,6 @@ public class arcgisMapController {
 	public String welcome(Model model) {
 		Arcgis arcgis = this.arcgisService.getObjById(1L);
 		List<Features> features = arcgis.getFeatures();
-		return "arcgisMap";
+		return "arcgisMap_new";
 	}
 }

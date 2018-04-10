@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+	<title>Sketch temporary geometries - 4.6</title>
+
+	#*<link rel="stylesheet" href="https://js.arcgis.com/4.6/esri/css/main.css">
+	<script src="https://js.arcgis.com/4.6/"></script>*#
+	<link rel="stylesheet" href="$!web.contextPath/resources/arcgisJS/library/4.6/esri/css/main.css">
+	<script src="$!web.contextPath/resources/arcgisJS/library/4.6/init.js"></script>
+
+	<style>
+		html,
+		body,
+		#viewDiv {
+			padding: 0;
+			margin: 0;
+			height: 100%;
+			width: 100%;
+			font-family: verdana;
+		}
+
+		#topbar {
+			background: #fff;
+			position: absolute;
+			top: 15px;
+			right: 15px;
+			padding: 10px;
+		}
+
+		.action-button {
+			font-size: 16px;
+			background-color: transparent;
+			border: 1px solid #D3D3D3;
+			color: #6e6e6e;
+			height: 32px;
+			width: 32px;
+			text-align: center;
+			box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+		}
+
+		.action-button:hover,
+		.action-button:focus {
+			background: #0079c1;
+			color: #e4e4e4;
+		}
+
+		.active {
+			background: #0079c1;
+			color: #e4e4e4;
+		}
+	</style>
+
+	<script>
+		require([
+			"esri/views/MapView",
+			"esri/WebMap",
+			"esri/widgets/Sketch/SketchViewModel",
+			"esri/Graphic",
+			"esri/layers/GraphicsLayer",
+			"dojo/domReady!"
+		], function(
+			MapView, WebMap,
+			SketchViewModel, Graphic, GraphicsLayer
+		) {
+
+			// 使用GraphicsLayer创建绘制草图
+			var tempGraphicsLayer = new GraphicsLayer();
+
+			// 创建底图
+			var webmap = new WebMap({
+				portalItem: { // autocasts as new PortalItem()
+					id: "23fe7e8317ba4331b6ca72bf2a8eddb6"
+				},
+				layers: [tempGraphicsLayer]
+			});
+
+			var view = new MapView({
+				container: "viewDiv",
+				map: webmap,
+				zoom: 15,
+				center: [110.35266549558898, 19.77823615244761]
+			});
+
+			view.when(function() {
+				// 创建一个新的草图
+				var sketchViewModel = new SketchViewModel({
+					view: view,
+					layer: tempGraphicsLayer,
+					pointSymbol: { // 使用点的符号
+						type: "simple-marker", // 自动拖放 as new SimpleMarkerSymbol()
+						style: "square",
+						color: "#8A2BE2",
+						size: "16px",
+						outline: { // 自动拖放 as new SimpleLineSymbol()
+							color: [255, 255, 255],
+							width: 3 // points
+						}
+					},
+					polylineSymbol: { // 使用线段符号
+						type: "simple-line",
+						color: "#8A2BE2",
+						width: "4",
+						style: "dash"
+					},
+					polygonSymbol: { // 使用多边形符号
+						type: "simple-fill",
+						color: "rgba(138,43,226, 0.8)",
+						style: "solid",
+						outline: {
+							color: "white",
+							width: 1
+						}
+					}
+				});
+
+				// 从事件获取完整的图形并将其添加到视图中。
+				// 此事件在用户按下时触发。
+				// “C”键完成草图点，多边形或折线。
+				// 双击完成绘制折线或多边形。
+				// 点击完成草图几何图形。
+				sketchViewModel.on("draw-complete", function(evt) {
+					// 如果创建多点几何图形，则更改图形的符号
+					if (evt.geometry.type === "multipoint") {
+						evt.graphic.symbol = {
+							type: "simple-marker",
+							style: "square",
+							color: "green",
+							size: "16px",
+							outline: {
+								color: [255, 255, 255],
+								width: 3
+							}
+						};
+					}
+					if(evt.geometry.type === "point") {
+						showCoordinates(evt);
+					}
+					// 将图形添加到图形层
+					tempGraphicsLayer.add(evt.graphic);
+					setActiveButton();
+				});
+
+				// 激活草图创建一个点
+				var drawPointButton = document.getElementById("pointButton");
+				drawPointButton.onclick = function() {
+					// set the sketch to create a point geometry
+					sketchViewModel.create("point");
+					setActiveButton(this);
+				};
+
+				// 激活草图创建多个点
+				var drawMultipointButton = document.getElementById(
+					"multipointButton");
+				drawMultipointButton.onclick = function() {
+					// set the sketch to create a multipoint geometry
+					sketchViewModel.create("multipoint");
+					setActiveButton(this);
+				};
+
+				// 激活草图创建一条线段
+				var drawLineButton = document.getElementById("polylineButton");
+				drawLineButton.onclick = function() {
+					// set the sketch to create a polyline geometry
+					sketchViewModel.create("polyline");
+					setActiveButton(this);
+				};
+
+				// 激活草图创建一个几何图形
+				var drawPolygonButton = document.getElementById("polygonButton");
+				drawPolygonButton.onclick = function() {
+					// set the sketch to create a polygon geometry
+					sketchViewModel.create("polygon");
+					setActiveButton(this);
+				};
+
+				// 重置按钮
+				document.getElementById("resetBtn").onclick = function() {
+					tempGraphicsLayer.removeAll();
+					sketchViewModel.reset();
+					setActiveButton();
+				};
+
+				function setActiveButton(selectedButton) {
+					// 将视图集中于激活键盘快捷键以便绘制草图。
+					view.focus();
+					var elements = document.getElementsByClassName("active");
+					for (var i = 0; i < elements.length; i++) {
+						elements[i].classList.remove("active");
+					}
+					if (selectedButton) {
+						selectedButton.classList.add("active");
+					}
+				}
+
+				function showCoordinates(evt){
+					//从事件中获取mapPoint
+					var mp = evt.geometry;
+					//显示鼠标坐标
+					alert("lon: " + mp.longitude + " lat: " + mp.latitude)
+				}
+			});
+		});
+	</script>
+</head>
+
+<body>
+<div id="viewDiv">
+	<div id="topbar">
+		<button class="action-button esri-icon-blank-map-pin" id="pointButton" type="button"
+				title="Draw point"></button>
+		<button class="action-button esri-icon-handle-horizontal" id="multipointButton" type="button"
+				title="Draw multipoint"></button>
+		<button class="action-button esri-icon-polyline" id="polylineButton" type="button"
+				title="Draw polyline"></button>
+		<button class="action-button esri-icon-polygon" id="polygonButton" type="button"
+				title="Draw polygon"></button>
+		<button class="action-button esri-icon-trash" id="resetBtn" type="button" title="Clear graphics"></button>
+	</div>
+</div>
+</body>
+
+</html>
