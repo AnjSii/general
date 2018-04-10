@@ -1,8 +1,7 @@
 package com.wu.general.foundation.domain;
-import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -17,8 +16,8 @@ public class Geometry extends IdEntity {
 
 	private String type;
 
-	@OneToMany(mappedBy = "geometry", cascade = { javax.persistence.CascadeType.REMOVE })
-	private List<Coordinates> coordinates;
+	@OneToOne
+	private Coordinates coordinates;
 
 	public String getType() {
 		return type;
@@ -28,11 +27,11 @@ public class Geometry extends IdEntity {
 		this.type = type;
 	}
 
-	public List<Coordinates> getCoordinates() {
+	public Coordinates getCoordinates() {
 		return coordinates;
 	}
 
-	public void setCoordinates(List<Coordinates> coordinates) {
+	public void setCoordinates(Coordinates coordinates) {
 		this.coordinates = coordinates;
 	}
 }

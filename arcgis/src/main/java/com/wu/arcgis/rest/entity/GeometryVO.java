@@ -1,12 +1,13 @@
 package com.wu.arcgis.rest.entity;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class GeometryVO {
 
 	private String type;
 
-	private List<CoordinatesVO> coordinates;
+	private List<BigDecimal> coordinates;
 
 	public String getType() {
 		return type;
@@ -16,11 +17,11 @@ public class GeometryVO {
 		this.type = type;
 	}
 
-	public List<CoordinatesVO> getCoordinates() {
+	public List<BigDecimal> getCoordinates() {
 		return coordinates;
 	}
 
-	public void setCoordinates(List<CoordinatesVO> coordinates) {
+	public void setCoordinates(List<BigDecimal> coordinates) {
 		this.coordinates = coordinates;
 	}
 }

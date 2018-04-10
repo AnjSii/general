@@ -4,13 +4,23 @@ import java.math.BigDecimal;
 
 public class CoordinatesVO {
 
-	private BigDecimal coordinates;
+	private BigDecimal longitude;
 
-	public BigDecimal getCoordinates() {
-		return coordinates;
+	private BigDecimal latitude;
+
+	public BigDecimal getLongitude() {
+		return longitude;
 	}
 
-	public void setCoordinates(BigDecimal coordinates) {
-		this.coordinates = coordinates;
+	public void setLongitude(BigDecimal longitude) {
+		this.longitude = longitude;
+	}
+
+	public BigDecimal getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(BigDecimal latitude) {
+		this.latitude = latitude;
 	}
 }

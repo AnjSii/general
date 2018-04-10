@@ -1,5 +1,6 @@
 package com.wu.arcgis.rest.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,13 +35,12 @@ public class ArcgisRestServiceIml implements ArcgisRestService {
 				FeaturesVO featuresVO = new FeaturesVO();
 				GeometryVO geometryVO = new GeometryVO();
 				geometryVO.setType(features.getGeometry().getType());
-				List<CoordinatesVO> coordinatesVOList = new ArrayList<>();
-				for (Coordinates coordinates : features.getGeometry().getCoordinates()) {
-					CoordinatesVO coordinatesVO = new CoordinatesVO();
-					coordinatesVO.setCoordinates(coordinates.getCoordinates());
-					coordinatesVOList.add(coordinatesVO);
-				}
-				geometryVO.setCoordinates(coordinatesVOList);
+
+				List<BigDecimal> coordinatesList = new ArrayList<>();
+				coordinatesList.add(features.getGeometry().getCoordinates().getLongitude());
+				coordinatesList.add(features.getGeometry().getCoordinates().getLatitude());
+				geometryVO.setCoordinates(coordinatesList);
+
 				featuresVO.setGeometry(geometryVO);
 				PropertiesVO propertiesVO = new PropertiesVO();
 				propertiesVO.setName(features.getProperties().getName());

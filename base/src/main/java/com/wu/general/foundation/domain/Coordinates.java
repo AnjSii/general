@@ -4,8 +4,7 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -19,24 +18,24 @@ import com.wu.general.core.domain.IdEntity;
 public class Coordinates extends IdEntity {
 
 	@Column(precision = 12, scale = 2)
-	private BigDecimal coordinates;
+	private BigDecimal longitude;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	private Geometry geometry;
+	@Column(precision = 12, scale = 2)
+	private BigDecimal latitude;
 
-	public BigDecimal getCoordinates() {
-		return coordinates;
+	public BigDecimal getLongitude() {
+		return longitude;
 	}
 
-	public void setCoordinates(BigDecimal coordinates) {
-		this.coordinates = coordinates;
+	public void setLongitude(BigDecimal longitude) {
+		this.longitude = longitude;
 	}
 
-	public Geometry getGeometry() {
-		return geometry;
+	public BigDecimal getLatitude() {
+		return latitude;
 	}
 
-	public void setGeometry(Geometry geometry) {
-		this.geometry = geometry;
+	public void setLatitude(BigDecimal latitude) {
+		this.latitude = latitude;
 	}
 }
