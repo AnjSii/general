@@ -29,7 +29,7 @@
 		<springframework.version>4.3.7.RELEASE</springframework.version>
 		<springframework.security.version>4.2.2.RELEASE</springframework.security.version>
 		<hibernate.version>5.2.8.Final</hibernate.version>
-		<hibernate-validator.version>5.3.4.Final</hibernate-validator.version>
+		<hibernate-validator.version>5.3.6.Final</hibernate-validator.version>
 		<classmate.version>1.3.3</classmate.version>
 		<druid.version>1.0.28</druid.version>
 		<ehcache.version>2.10.3</ehcache.version>
