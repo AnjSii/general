@@ -61,7 +61,7 @@
 		<dozer.version>5.4.0</dozer.version>
 		<jdom.version>1.1.3</jdom.version>
 		<dom4j.version>1.6.1</dom4j.version>
-		<poi.version>3.9</poi.version>
+		<poi.version>4.1.2</poi.version>
 		<javacsv.version>2.0</javacsv.version>
 		<velocity.version>1.7</velocity.version>
 		<velocity.tools.version>2.0</velocity.tools.version>
