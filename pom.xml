@@ -70,7 +70,7 @@
 		<paho-mqtt-client.version>0.4.0</paho-mqtt-client.version>
 		<UserAgentUtils.version>1.20</UserAgentUtils.version>
 		<quartz.version>2.2.3</quartz.version>
-		<shiro.version>1.2.6</shiro.version>
+		<shiro.version>1.7.1</shiro.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<bcprov-jdk16.version>1.46</bcprov-jdk16.version>
 		<!-- jdbc driver setting -->
