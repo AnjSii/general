@@ -82,7 +82,7 @@
 		<mockito.version>1.10.19</mockito.version>
 		<powermock.version>1.6.5</powermock.version>
 		<dbunit.version>2.5.3</dbunit.version>
-		<h2.version>1.4.193</h2.version>
+		<h2.version>2.1.210</h2.version>
 		<json-path.version>2.2.0</json-path.version>
 		<tomcat-servlet-api.version>7.0.75</tomcat-servlet-api.version>
 		<jmh.version>1.17.3</jmh.version>
