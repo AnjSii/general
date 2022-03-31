@@ -26,7 +26,7 @@
 	<properties>
 		<!-- version setting -->
 		<aspectj.version>1.8.10</aspectj.version>
-		<springframework.version>4.3.7.RELEASE</springframework.version>
+		<springframework.version>5.3.18</springframework.version>
 		<springframework.security.version>4.2.2.RELEASE</springframework.security.version>
 		<hibernate.version>5.2.8.Final</hibernate.version>
 		<hibernate-validator.version>5.3.4.Final</hibernate-validator.version>
