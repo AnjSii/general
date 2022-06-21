@@ -74,7 +74,7 @@
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<bcprov-jdk16.version>1.46</bcprov-jdk16.version>
 		<!-- jdbc driver setting -->
-		<mysql.driver.version>5.1.41</mysql.driver.version>
+		<mysql.driver.version>8.0.28</mysql.driver.version>
 
 		<!-- test setting -->
 		<junit.version>4.12</junit.version>
